@@ -29,36 +29,39 @@ if (isset($_POST['create'])) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Create User</title>
 </head>
+
 <body>
 
-<h2>Create New User</h2>
+    <h2>Create New User</h2>
 
-<form method="POST">
+    <form method="POST">
 
-    <input type="text" name="name" placeholder="Name" required>
-    <br><br>
+        <input type="text" name="name" placeholder="Name" required>
+        <br><br>
 
-    <input type="email" name="email" placeholder="Email" required>
-    <br><br>
+        <input type="email" name="email" placeholder="Email" required>
+        <br><br>
 
-    <input type="password" name="password" placeholder="Password" required>
-    <br><br>
+        <input type="password" name="password" placeholder="Password" required>
+        <br><br>
 
-    <select name="role" required>
-        <option value="">Select Role</option>
-        <option value="student">Student</option>
-        <option value="canteen">Canteen</option>
-        <option value="admin">Admin</option>
-    </select>
+        <select name="role" required>
+            <option value="">Select Role</option>
+            <option value="student">Student</option>
+            <option value="canteen">Canteen</option>
+            <option value="admin">Admin</option>
+        </select>
 
-    <br><br>
+        <br><br>
 
-    <button type="submit" name="create">Create User</button>
+        <button type="submit" name="create">Create User</button>
 
-</form>
+    </form>
 
 </body>
+
 </html>

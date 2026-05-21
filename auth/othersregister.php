@@ -2,28 +2,31 @@
 session_start();
 include "../database/db_connection.php";
 
-function registerUser($conn, $name,  $phone, $filePath)
+function registerUser($conn, $name,  $email, $filePath)
 {
     $role = 'notstudent';
 
 
 
-    $query = "INSERT INTO users (name,  role,  isverified, phone, proof_file)
-              VALUES ('$name',  '$role',  0, '$phone', '$filePath')";
+    $query = "INSERT INTO users (name,  role,   email, proof_file,pending)
+              VALUES ('$name',  '$role',  '$email', '$filePath',1)";
 
     return mysqli_query($conn, $query);
 }
 ?>
 <?php
 if (isset($_POST['send'])) {
-    /*
-    if (!isset($_SESSION['name'], $_SESSION['email'], $_SESSION['password'])) {
-        echo "Session expired. Please register again.";
-        exit();
-    }
-*/
-    $phone = $_POST['phone'];
+   
+
+    $email = $_POST['email'];
     $name = $_POST['name'];
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+ 
+    echo "Invalid Email";
+    exit();
+}
+
 
     if (!isset($_FILES['proof']) || $_FILES['proof']['error'] != 0) {
         echo "File upload failed";
@@ -50,7 +53,7 @@ if (isset($_POST['send'])) {
     registerUser(
         $conn,
         $name,
-        $phone,
+        $email,
         $path
     );
 
@@ -74,8 +77,8 @@ if (isset($_POST['send'])) {
         <input type="text" name="name" placeholder="Name" required><br><br>
 
 
-        <input type="text" name="phone" placeholder="Phone Number" required><br><br>
-        <label> Upload a certificate that your a part of JUST community </label><br>
+        <input type="text" name="email" placeholder="Enter your personal Email" required><br><br>
+        <label> Upload a certificate to prove you are a part of JUST community </label><br>
 
 
         <br>
