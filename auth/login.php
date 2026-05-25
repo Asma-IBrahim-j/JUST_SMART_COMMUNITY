@@ -2,72 +2,134 @@
 session_start();
 include "../database/db_connection.php";
 
+/** @var mysqli $conn */
+
 if (isset($_POST['login'])) {
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
+    //checking if user existed in the database
     $query = "SELECT * FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $query);
 
-    if ($row = mysqli_fetch_assoc($result)) {
+    if ($result && mysqli_num_rows($result) > 0) {
 
+        $row = mysqli_fetch_assoc($result);
+
+        // password verifying
         if (password_verify($password, $row['password'])) {
 
+            //  Create Session
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['name'] = $row['name'];
             $_SESSION['role'] = $row['role'];
 
+            // directing the user according to the rule 
             if ($row['role'] == "student") {
 
                 header("Location: ../student/dashboard.php");
+
             } elseif ($row['role'] == "canteen") {
 
                 header("Location: ../canteen/dashboard.php");
+
             } elseif ($row['role'] == "admin") {
 
                 header("Location: ../admin/dashboard.php");
+
+            } else {
+
+                // role unknown
+                session_destroy();
+                header("Location: login.php");
             }
 
-
             exit();
+
         } else {
-            echo "Wrong Password";
+
+            $error = "Wrong Password";
         }
+
     } else {
-        echo "User not found";
+
+        $error = "User not found";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 
 <body>
 
-    <div class="form-container">
+<div class="form-container">
 
-        <h2>Login</h2>
+    <h2>
+        Login
+    </h2>
 
-        <form method="POST" action="">
+    <?php
+    if(isset($error)){
+        echo "<div class='alert alert-error'>
+        $error
+      </div>";
+    }
+    ?>
 
-            <input type="email" name="email" placeholder="Email" required>
+    <form method="POST">
 
-            <input type="password" name="password" placeholder="Password" required>
+        <input type="email"
+               name="email"
+               placeholder="Enter your email"
+               required>
 
-            <button type="submit" name="login">Login</button>
+        <div class="password-box">
 
-        </form>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Enter your password"
+                   required>
 
-        <br>
-        <a href="../auth/usertype.php">Don't have an account? Register</a>
+          <span class="toggle-eye"
+      onclick="togglePassword(this)">
+               👁
+          </span>
+        </div>
 
-    </div>
+        <button type="submit"
+                name="login">
+
+            Login
+
+        </button>
+
+    </form>
+
+    <br>
+
+    <p style="text-align:center;">
+
+        Don't have an account?
+
+        <a href="usertype.php">
+
+            Register
+
+        </a>
+
+    </p>
+
+</div>
+
+<script src="../assets/js/main.js"></script>
+
 </body>
 
 </html>

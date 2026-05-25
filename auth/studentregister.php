@@ -1,56 +1,54 @@
 <?php
 session_start();
 include "../database/db_connection.php";
-
+/** @var mysqli $conn */
 if (isset($_POST['register'])) {
 
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $faculty = $_POST['faculty'];
-    //  $role = $_POST['role'];
     $role = 'student';
-    $_SESSION['name']=$name;
-    $_SESSION['email']=$email;
-    $_SESSION['password']=$password;
-    $_SESSION['faculty']=$faculty;
-    $_SESSION['role']=$role;
 
+    // 1. password match
     if ($password !== $confirm_password) {
         echo "Passwords do not match";
         exit();
     }
 
+    // 2. password length
     if (strlen($password) < 6) {
         echo "Password must be at least 6 characters";
         exit();
     }
-    // 1. Email validation (JUST only)
-    if ($role == "student" && !str_ends_with($email, "just.edu.jo") && !str_contains($email, "@")) {
 
+    // 3. email validation (FIXED)
+    if (!str_contains($email, "@") || !str_ends_with($email, "just.edu.jo")) {
         echo "Only JUST emails allowed for students";
         exit();
     }
 
-    // 2. Check duplicate email
+    // 4. duplicate email check
     $check = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
     if (mysqli_num_rows($check) > 0) {
         echo "Email already exists";
         exit();
     }
 
-    // 3. Hash password
+    // 5. hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // 4. Insert into DB
-    $query = "INSERT INTO users (name, email, password, role,faculty)
-              VALUES ('$name', '$email', '$hashedPassword', '$role','$faculty')";
+    // 6. insert user
+    $query = "INSERT INTO users (name, email, password, role, faculty)
+              VALUES ('$name', '$email', '$hashedPassword', '$role', '$faculty')";
 
     if (mysqli_query($conn, $query)) {
-      //  echo "Registered successfully";
-        header("Location: ../student/dashboard.php");
+
+    
+        header("Location: ../auth/login.php");
         exit();
+
     } else {
         echo "Error: " . mysqli_error($conn);
     }
@@ -62,53 +60,90 @@ if (isset($_POST['register'])) {
 
 <head>
     <title>StudentRegisteration</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 
 <body>
-    <script src="./assets/js/main.js"></script>
 
+<div class="form-container">
 
-    <form method="POST" action="">
-        <div class="form-container">
-            <h2>Student Registeration</h2>
-            <input type="text" name="name" placeholder="Name" required><br><br>
+    <h2>
+        Student Registration
+    </h2>
 
-            <input type="email" name="email" id="email" placeholder="JUST Email" required><br><br>
-            <!--
-    <select name="role" required>
-    <option value="">Select Account Type</option>
-    <option value="student">Student</option>
-    <option value="canteen">Canteen</option>
-    </select>
-    <br><br>
--->
-            <select name="faculty" required>
-                <option value="">Select Faculty</option>
-                <option value="Engineering">Engineering</option>
-                <option value="IT">IT</option>
-                <option value="Pharmacy">Pharmacy</option>
-                <option value="Medicine">Medicine</option>
-                <option value="Nursing">Nursing</option>
-                <option value="Dentistry">Dentistry</option>
-                <option value="Agriculture">Agriculture</option>
-                <option value="Veterinarian">Veterinarian</option>
-                <option value="Science&Arts">Science&Arts</option>
-                <option value="Architecture&Design">Architecture&Design</option>
-            </select>
+    <?php
+    if(isset($error)){
+        echo "<p style='color:red;'>$error</p>";
+    }
 
-            <br><br>
-            <div class="password-box">
-                <input type="password" id="password" name="password" placeholder="Password" minlength="6" required>
+    if(isset($success)){
+        echo "<p style='color:green;'>$success</p>";
+    }
+    ?>
 
-                <span class="toggle-eye" onclick="togglePassword()">👁</span>
-            </div>
-            <br>
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required><br><br>
+    <form method="POST">
 
-            <button type="submit" name="register" id="register">Register</button>
+        <input type="text"
+               name="name"
+               placeholder="Full Name"
+               required>
+
+        <input type="email"
+               name="email"
+               placeholder="JUST Email"
+               required>
+
+        <div class="password-box">
+
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Password"
+                   required>
+
+          <span class="toggle-eye"
+      onclick="togglePassword(this)">
+          👁
+     </span>
+
         </div>
+
+        <div class="password-box">
+
+            <input type="password"
+                   id="confirm_password"
+                   name="confirm_password"
+                   placeholder="Confirm Password"
+                   required>
+
+        </div>
+
+        <button type="submit"
+                name="register">
+
+            Register
+
+        </button>
+
     </form>
+
+    <br>
+
+    <p style="text-align:center;">
+
+        Already have an account?
+
+        <a href="login.php">
+
+            Login
+
+        </a>
+
+    </p>
+
+</div>
+
+<script src="../assets/js/main.js"></script>
 
 </body>
 

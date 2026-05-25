@@ -1,9 +1,11 @@
 <?php
+session_start();
 include "../database/db_connection.php";
-
+/** @var mysqli $conn */
 $id = $_GET['id'];
 
 $sql = "SELECT * FROM lost_items WHERE id=$id";
+
 $result = mysqli_query($conn, $sql);
 
 $row = mysqli_fetch_assoc($result);
@@ -11,44 +13,96 @@ $row = mysqli_fetch_assoc($result);
 if (isset($_POST['update'])) {
 
     $title = $_POST['title'];
+
     $description = $_POST['description'];
+
     $location = $_POST['location'];
 
-    $update_sql = "UPDATE lost_items 
-                   SET title='$title',
-                       description='$description',
-                       location='$location'
-                   WHERE id=$id";
+    $update_sql = "
+    UPDATE lost_items
+    SET
+        title='$title',
+        description='$description',
+        location='$location'
+    WHERE id=$id
+    ";
 
     mysqli_query($conn, $update_sql);
 
-    header("Location: lost_found.php");
+    header("Location: view.php");
 }
 ?>
 
-<h2>Edit Item</h2>
+<!DOCTYPE html>
+<html>
 
-<form method="POST">
+<head>
 
-    Title:
-    <input type="text" name="title"
-           value="<?php echo $row['title']; ?>" required>
+    <title>Edit Item</title>
 
-    <br><br>
+    <link rel="stylesheet"
+          href="../assets/css/lostfound.css">
 
-    Description:
-    <textarea name="description"><?php echo $row['description']; ?></textarea>
+</head>
 
-    <br><br>
+<body>
 
-    Location:
-    <input type="text" name="location"
-           value="<?php echo $row['location']; ?>">
+<div class="navbar">
 
-    <br><br>
+    <a href="../<?php echo $_SESSION['role']; ?>/dashboard.php">
+        Dashboard
+    </a>
 
-    <button type="submit" name="update">
-        Update
-    </button>
+    <a href="view.php">
+        Lost & Found
+    </a>
 
-</form>
+    <a href="../auth/logout.php">
+        Logout
+    </a>
+
+</div>
+
+<div class="container">
+
+<div class="item-card">
+
+    <h1>
+        Edit Lost Item
+    </h1>
+
+    <form method="POST">
+
+        <label>Item Title</label>
+
+        <input type="text"
+               name="title"
+               value="<?php echo $row['title']; ?>"
+               required>
+
+        <label>Description</label>
+
+        <textarea name="description"
+                  rows="5"><?php echo $row['description']; ?></textarea>
+
+        <label>Location</label>
+
+        <input type="text"
+               name="location"
+               value="<?php echo $row['location']; ?>">
+
+        <button type="submit"
+                name="update">
+
+            Update Item
+
+        </button>
+
+    </form>
+
+</div>
+
+</div>
+
+</body>
+</html>

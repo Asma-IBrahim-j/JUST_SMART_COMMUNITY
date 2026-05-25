@@ -13,8 +13,8 @@ function registerUser($conn, $name,  $email, $filePath)
 
     return mysqli_query($conn, $query);
 }
-?>
-<?php
+
+
 if (isset($_POST['send'])) {
    
 
@@ -49,7 +49,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $path = "../uploads/" . $uniqueName;
 
     move_uploaded_file($tmpName, $path);
-
+/** @var mysqli $conn */
     registerUser(
         $conn,
         $name,
@@ -68,26 +68,99 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 <head>
 
     <title>Othersregisteration </title>
+    <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 
 <body>
-    <h2>Not Student Registeration</h2>
-    <form method="POST" enctype="multipart/form-data">
 
-        <input type="text" name="name" placeholder="Name" required><br><br>
+<div class="form-container">
 
+    <h2>
+        Community Registration
+    </h2>
 
-        <input type="text" name="email" placeholder="Enter your personal Email" required><br><br>
-        <label> Upload a certificate to prove you are a part of JUST community </label><br>
+    <?php
+    if(isset($error)){
+        echo "<p style='color:red;'>$error</p>";
+    }
 
+    if(isset($success)){
+        echo "<p style='color:green;'>$success</p>";
+    }
+    ?>
 
-        <br>
-        <input type="file" name="proof" required><br>
-        <label> Allowed extentions is : pdf,jpg,png </label><br><br>
-        <button type="submit" name="send"> Submit</button>
+    <form method="POST"
+          enctype="multipart/form-data">
+
+        <input type="text"
+               name="name"
+               placeholder="Full Name"
+               required>
+
+        <input type="email"
+               name="email"
+               placeholder="Email"
+               required>
+
+        <div class="password-box">
+
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Password"
+                   required>
+
+            <span class="toggle-eye"
+      onclick="togglePassword(this)">
+         👁
+         </span>
+        </div>
+
+        <div class="password-box">
+
+            <input type="password"
+                   id="confirm_password"
+                   name="confirm_password"
+                   placeholder="Confirm Password"
+                   required>
+
+        </div>
+
+        <label class="file-label">
+    Upload proof of relation to JUST
+</label>
+
+<input class="file-input"
+       type="file"
+       name="proof_file"
+       required>
+
+        <button type="submit"
+                name="register">
+
+            Register
+
+        </button>
+
     </form>
 
+    <br>
 
+    <p style="text-align:center;">
+
+        Already have an account?
+
+        <a href="login.php">
+
+            Login
+
+        </a>
+
+    </p>
+
+</div>
+
+<script src="../assets/js/main.js"></script>
 
 </body>
 

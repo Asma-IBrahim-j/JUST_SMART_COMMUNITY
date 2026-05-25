@@ -2,30 +2,67 @@
 <html>
 <head>
     <title>Choose User Type</title>
+    <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 <body>
 
-<h2>Select User Type</h2>
+<div class="form-container">
 
-<form method="POST" action="redirect.php">
+    <h2>
+        Select User Type
+    </h2>
 
-    <label>
-        <input type="radio" name="user_type" value="student" required>
-        JUST Student
-    </label><br>
+    <p class="user-title">
+        Please choose how you want to continue
+    </p>
 
-    <label>
-        <input type="radio" name="user_type" value="notstudent">
-        Not a JUST Student
-    </label><br><br>
+    <form method="POST"
+          action="redirect.php">
 
-    <button type="submit">Next</button>
+        <div class="user-options">
 
-</form>
+            <label class="user-card">
+
+                <input type="radio"
+                       name="user_type"
+                       value="student"
+                       required>
+
+                <h3>JUST Student</h3>
+
+                <p>
+                    I am a student at JUST University
+                </p>
+
+            </label>
+
+            <label class="user-card">
+
+                <input type="radio"
+                       name="user_type"
+                       value="notstudent">
+
+                <h3>Community Member</h3>
+
+                <p>
+                    I am not a JUST student
+                </p>
+
+            </label>
+
+        </div>
+
+        <button type="submit">
+
+            Continue
+
+        </button>
+
+    </form>
+
+</div>
 
 </body>
-
-
 
 </html>
 ``

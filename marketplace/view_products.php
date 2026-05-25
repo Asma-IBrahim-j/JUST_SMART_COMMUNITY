@@ -9,22 +9,66 @@ $res = mysqli_query($conn, $sql);
 <html>
 <head>
     <title>Marketplace</title>
+    <link rel="stylesheet" href="../assets/css/marketplace.css">
 </head>
 <body>
-    <h1>Student Marketplace</h1>
+
+<div class="navbar">
+
+    <a href="view_products.php">Marketplace</a>
+
     <a href="add_product.php">Sell Something</a>
+
     <a href="my_products.php">My Products</a>
-    <a href="../auth/logout.php">Logout</a>
-    <hr>
-   
+
+   <a href="../<?php echo $_SESSION['role']; ?>/dashboard.php">Dashboard</a>
+
+   <a href="../auth/logout.php">Logout</a>
+
+</div>
+
+<div class="container">
+
+    <h1>Student Marketplace</h1>
+
+    <div class="product-grid">
+
     <?php while($row = mysqli_fetch_assoc($res)): ?>
-        <div style="border:1px solid #ccc; padding:10px; margin:10px; width:300px">
-            <h3><?php echo $row['title']; ?></h3>
-            <p><?php echo $row['description']; ?></p>
-            <b><?php echo $row['price']; ?> JD</b><br>
-            <small>by <?php echo $row['name']; ?></small><br>
-            <a href="request_product.php?id=<?php echo $row['id']; ?>">Request</a>
+
+        <div class="product-card">
+
+            <?php if($row['image']){ ?>
+
+                <img src="<?= $row['image'] ?>">
+
+            <?php } ?>
+
+            <h3><?= $row['title'] ?></h3>
+
+            <p><?= $row['description'] ?></p>
+
+            <p class="price">
+                <?= $row['price'] ?> JD
+            </p>
+
+            <small>
+                by <?= $row['name'] ?>
+            </small>
+
+            <br>
+
+            <a class="btn btn-primary"
+               href="request_product.php?id=<?= $row['id'] ?>">
+               Request
+            </a>
+
         </div>
+
     <?php endwhile; ?>
+
+    </div>
+
+</div>
+
 </body>
 </html>

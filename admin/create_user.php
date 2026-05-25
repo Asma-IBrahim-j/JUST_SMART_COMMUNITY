@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "../database/db_connection.php";
-
+/** @var mysqli $conn */
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
     header("Location: ../auth/login.php");
     exit();
@@ -32,36 +32,87 @@ if (isset($_POST['create'])) {
 
 <head>
     <title>Create User</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 
 <body>
 
-    <h2>Create New User</h2>
+<div class="navbar">
+
+    <a href="dashboard.php">Dashboard</a>
+
+    <a href="../auth/logout.php">Logout</a>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <h1 class="page-title">
+        Create New User
+    </h1>
 
     <form method="POST">
 
-        <input type="text" name="name" placeholder="Name" required>
-        <br><br>
+        <label>Name</label>
 
-        <input type="email" name="email" placeholder="Email" required>
-        <br><br>
+        <input type="text"
+               name="name"
+               placeholder="Name"
+               required>
 
-        <input type="password" name="password" placeholder="Password" required>
-        <br><br>
+        <label>Email</label>
+
+        <input type="email"
+               name="email"
+               placeholder="Email"
+               required>
+
+        <label>Password</label>
+
+        <input type="password"
+               name="password"
+               placeholder="Password"
+               required>
+
+        <label>Role</label>
 
         <select name="role" required>
-            <option value="">Select Role</option>
-            <option value="student">Student</option>
-            <option value="canteen">Canteen</option>
-            <option value="admin">Admin</option>
+
+            <option value="">
+                Select Role
+            </option>
+
+            <option value="student">
+                Student
+            </option>
+
+            <option value="canteen">
+                Canteen
+            </option>
+
+            <option value="admin">
+                Admin
+            </option>
+
         </select>
 
         <br><br>
 
-        <button type="submit" name="create">Create User</button>
+        <button class="btn btn-primary"
+                type="submit"
+                name="create">
+
+            Create User
+
+        </button>
 
     </form>
 
-</body>
+</div>
 
+</div>
+
+</body>
 </html>

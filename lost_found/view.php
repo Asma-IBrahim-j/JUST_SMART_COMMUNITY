@@ -1,138 +1,205 @@
 <?php
+session_start();
 include "../database/db_connection.php";
-
+/** @var mysqli $conn */
 $search = "";
 
-/* DELETE */
+/* DELETE ITEM */
 if (isset($_GET['delete'])) {
+
     $id = $_GET['delete'];
-    mysqli_query($conn, "DELETE FROM lost_items WHERE id=$id");
-    header("Location: lost_found.php");
+
+    mysqli_query($conn,
+        "DELETE FROM lost_items WHERE id=$id"
+    );
+
+    header("Location: view.php");
     exit;
 }
 
 /* MARK AS FOUND */
 if (isset($_GET['found'])) {
+
     $id = $_GET['found'];
-    mysqli_query($conn, "UPDATE lost_items SET status='found' WHERE id=$id");
-    header("Location: lost_found.php");
+
+    mysqli_query($conn,
+        "UPDATE lost_items
+         SET status='found'
+         WHERE id=$id"
+    );
+
+    header("Location: view.php");
     exit;
 }
 
-/* SEARCH + SELECT */
-$is_search = isset($_GET['search']) && $_GET['search'] !== "";
+/* SEARCH */
+$is_search =
+    isset($_GET['search']) &&
+    $_GET['search'] !== "";
 
 if ($is_search) {
 
     $search = $_GET['search'];
 
-    $sql = "SELECT * FROM lost_items
-            WHERE title LIKE '%$search%'
-            OR description LIKE '%$search%'
-            OR location LIKE '%$search%'
-            ORDER BY created_at DESC";
+    $sql = "
+    SELECT * FROM lost_items
+    WHERE title LIKE '%$search%'
+    OR description LIKE '%$search%'
+    OR location LIKE '%$search%'
+    ORDER BY created_at DESC
+    ";
 
 } else {
 
-    $sql = "SELECT * FROM lost_items ORDER BY created_at DESC";
+    $sql = "
+    SELECT * FROM lost_items
+    ORDER BY created_at DESC
+    ";
 }
 
 $result = mysqli_query($conn, $sql);
 ?>
 
-<h2>Lost & Found Items</h2>
+<!DOCTYPE html>
+<html>
 
-<!-- SEARCH FORM -->
-<form method="GET">
-    <input type="text" name="search" placeholder="Search item" value="<?php echo $search; ?>">
-    <button type="submit">Search</button>
-</form>
+<head>
 
-<br>
+    <title>Lost & Found</title>
 
-<a href="add_lost_item.php">Add New Item</a>
+    <link rel="stylesheet"
+          href="../assets/css/lostfound.css">
 
-<br><br>
+</head>
 
-<?php
-if ($is_search) {
+<body>
+
+<div class="navbar">
+
+   <a href="../<?php echo $_SESSION['role']; ?>/dashboard.php">
+        Dashboard
+    </a>
+
+    <a href="../auth/logout.php">
+        Logout
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="top-bar">
+
+        <h1>Lost & Found</h1>
+
+        <a class="btn add-btn"
+           href="add_lost_item.php">
+
+           Add New Item
+
+        </a>
+
+    </div>
+
+    <form class="search-form" method="GET">
+
+        <input type="text"
+               name="search"
+               placeholder="Search item..."
+               value="<?php echo $search; ?>">
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    <div class="items-grid">
+
+    <?php
 
     if (mysqli_num_rows($result) > 0) {
 
         while ($row = mysqli_fetch_assoc($result)) {
-?>
 
-<div style="border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:10px;">
+    ?>
 
-    <h3><?php echo $row['title']; ?></h3>
-    <p><?php echo $row['description']; ?></p>
-    <small><?php echo $row['location']; ?></small>
+    <div class="item-card">
 
-    <br><br>
+        <h3>
+            <?php echo $row['title']; ?>
+        </h3>
 
-    Status:
-    <b>
-        <?php
-        if ($row['status'] == 'lost') {
-            echo "<span style='color:red;'>Lost</span>";
-        } else {
-            echo "<span style='color:green;'>Found</span>";
-        }
-        ?>
-    </b>
+        <p>
+            <?php echo $row['description']; ?>
+        </p>
 
-    <br><br>
+        <small>
+            <?php echo $row['location']; ?>
+        </small>
 
-    <a href="edit_item.php?id=<?php echo $row['id']; ?>">Edit</a> |
+        <br><br>
 
-    <a href="lost_found.php?delete=<?php echo $row['id']; ?>">Delete</a> |
+        <p>
 
-    <a href="lost_found.php?found=<?php echo $row['id']; ?>">Mark as Found</a>
+            <strong>Status:</strong>
 
-</div>
+            <span class="status <?= $row['status'] ?>">
 
-<?php
+                <?= ucfirst($row['status']) ?>
+
+            </span>
+
+        </p>
+
+        <a class="btn btn-edit"
+           href="edit_item.php?id=<?php echo $row['id']; ?>">
+
+           Edit
+
+        </a>
+
+        <a class="btn btn-delete"
+   href="view.php?delete=<?php echo $row['id']; ?>"
+   onclick="return confirm('Are you sure you want to delete this item?')">
+
+           Delete
+
+        </a>
+
+        <a class="btn btn-found"
+           href="view.php?found=<?php echo $row['id']; ?>">
+
+           Mark as Found
+
+        </a>
+
+    </div>
+
+    <?php
         }
 
     } else {
-        echo "<h3>No items found</h3>";
+
+        echo "
+<div class='empty-state'>
+
+    <h3>No Items Found</h3>
+
+    <p>
+        Try another search or add a new item.
+    </p>
+
+</div>
+";
     }
+    ?>
 
-} else {
-
-    while ($row = mysqli_fetch_assoc($result)) {
-?>
-
-<div style="border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:10px;">
-
-    <h3><?php echo $row['title']; ?></h3>
-    <p><?php echo $row['description']; ?></p>
-    <small><?php echo $row['location']; ?></small>
-
-    <br><br>
-
-    Status:
-    <b>
-        <?php
-        if ($row['status'] == 'lost') {
-            echo "<span style='color:red;'>Lost</span>";
-        } else {
-            echo "<span style='color:green;'>Found</span>";
-        }
-        ?>
-    </b>
-
-    <br><br>
-
-    <a href="edit_item.php?id=<?php echo $row['id']; ?>">Edit</a> |
-
-    <a href="lost_found.php?delete=<?php echo $row['id']; ?>">Delete</a> |
-
-    <a href="lost_found.php?found=<?php echo $row['id']; ?>">Mark as Found</a>
+    </div>
 
 </div>
 
-<?php
-    }
-}
-?>
+</body>
+</html>

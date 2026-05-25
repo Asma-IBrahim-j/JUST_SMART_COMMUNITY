@@ -34,14 +34,14 @@ let buttons = document.querySelectorAll(".order-btn");
 
         btn.addEventListener("click", function(e){
 
-            e.preventDefault();
+         
 
             let parent = btn.closest(".meal-item");
 
             let name = btn.dataset.name;
             let price = parseFloat(btn.dataset.price);
             let qty = parent.querySelector(".qty").value;
-
+            parent.querySelector(".hidden-qty").value = qty;
             let itemTotal = price * qty;
 
             if(orderContainer.innerHTML.includes("No items yet")){
