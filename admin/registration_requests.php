@@ -14,10 +14,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
 if (isset($_POST['approve'])) {
 
     $id = $_POST['user_id'];
-    $password = random_int(100000, 999999);
-    /* $hashed = password_hash($password, PASSWORD_DEFAULT);*/
+  
     mysqli_query($conn,
-        "UPDATE users SET pending = 0,password='$password' WHERE id = $id"
+        "UPDATE users SET pending = 0 WHERE id = $id"
     );
 
     echo "Approved ";
@@ -70,8 +69,7 @@ while($row = mysqli_fetch_assoc($result)){
     <br>
 
     <a class="btn btn-primary"
-       href="<?= $row['proof_file']?>"
-       download>
+      href="../assets/images/<?= basename($row['proof_file']) ?>" download>
 
        Download Certificate
 

@@ -2,25 +2,26 @@
 session_start();
 include "../database/db_connection.php";
 
-function registerUser($conn, $name,  $email, $filePath)
+function registerUser($conn, $name,  $email, $hashedpassword,$filePath)
 {
     $role = 'notstudent';
 
 
 
-    $query = "INSERT INTO users (name,  role,   email, proof_file,pending)
-              VALUES ('$name',  '$role',  '$email', '$filePath',1)";
+    $query = "INSERT INTO users (name,  role,   email,password, proof_file,pending)
+              VALUES ('$name',  '$role',  '$email','$hashedpassword', '$filePath',1)";
 
     return mysqli_query($conn, $query);
 }
 
 
-if (isset($_POST['send'])) {
+if (isset($_POST['register'])) {
    
 
     $email = $_POST['email'];
     $name = $_POST['name'];
-
+$password=$_POST['password'];
+ $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
  
     echo "Invalid Email";
@@ -46,7 +47,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     }
 
     $uniqueName = uniqid() . "." . $ext;
-    $path = "../uploads/" . $uniqueName;
+    $path = "../assets/images/" . $uniqueName;
 
     move_uploaded_file($tmpName, $path);
 /** @var mysqli $conn */
@@ -54,6 +55,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $conn,
         $name,
         $email,
+        $hashedPassword,
         $path
     );
 
@@ -132,7 +134,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 <input class="file-input"
        type="file"
-       name="proof_file"
+       name="proof"
        required>
 
         <button type="submit"
