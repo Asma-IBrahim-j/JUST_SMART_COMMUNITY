@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -81,7 +82,20 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
             </a>
 
         </div>
+ <div class="dashboard-card">
 
+    <h3>Create User</h3>
+
+    <p>
+        Add new students, canteen owners, or administrators.
+    </p>
+
+    <a class="dashboard-btn"
+       href="create_user.php">
+       Create User
+    </a>
+
+</div>
         <div class="dashboard-card">
 
             <h3>Registration Requests</h3>

@@ -8,7 +8,7 @@ if (isset($_POST['register'])) {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $faculty = $_POST['faculty'];
+    //$faculty = $_POST['faculty'];
     $role = 'student';
 
     // 1. password match

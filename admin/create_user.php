@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "../database/db_connection.php";
-/** @var mysqli $conn */
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
     header("Location: ../auth/login.php");
     exit();
@@ -14,15 +14,37 @@ if (isset($_POST['create'])) {
     $password = $_POST['password'];
     $role = $_POST['role'];
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $check = mysqli_query(
+        $conn,
+        "SELECT id FROM users WHERE email='$email'"
+    );
 
-    $query = "INSERT INTO users (name, email, password, role)
-              VALUES ('$name', '$email', '$hashedPassword', '$role')";
+    if(mysqli_num_rows($check) > 0){
 
-    if (mysqli_query($conn, $query)) {
-        echo "User created successfully";
-    } else {
-        echo "Error";
+        $error = "Email already exists";
+
+    }else{
+
+        $hashedPassword = password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        );
+
+        $query = "INSERT INTO users
+                  (name, email, password, role)
+                  VALUES
+                  ('$name', '$email', '$hashedPassword', '$role')";
+
+        if(mysqli_query($conn, $query)){
+
+            header("Location: manage_users.php");
+            exit();
+
+        }else{
+
+            $error = "Failed to create user";
+
+        }
     }
 }
 ?>
@@ -52,7 +74,15 @@ if (isset($_POST['create'])) {
     <h1 class="page-title">
         Create New User
     </h1>
+<?php if(isset($error)){ ?>
 
+   <div class="alert alert-error">
+
+    <?= $error ?>
+
+   </div>
+
+<?php } ?>
     <form method="POST">
 
         <label>Name</label>
@@ -97,8 +127,8 @@ if (isset($_POST['create'])) {
             </option>
 
         </select>
-
-        <br><br>
+         
+        
 
         <button class="btn btn-primary"
                 type="submit"
@@ -115,4 +145,5 @@ if (isset($_POST['create'])) {
 </div>
 
 </body>
+
 </html>
