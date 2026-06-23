@@ -8,50 +8,55 @@ if (isset($_POST['register'])) {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    //$faculty = $_POST['faculty'];
+   
     $role = 'student';
 
     // 1. password match
     if ($password !== $confirm_password) {
-        echo "Passwords do not match";
-        exit();
+     
+        $error="Passwords do not match";
+     
     }
 
     // 2. password length
-    if (strlen($password) < 6) {
-        echo "Password must be at least 6 characters";
-        exit();
+   elseif (strlen($password) < 6) {
+      
+        $error="Password must be at least 6 characters";
+       
     }
+    
 
     // 3. email validation (FIXED)
-    if (!str_contains($email, "@") || !str_ends_with($email, "just.edu.jo")) {
-        echo "Only JUST emails allowed for students";
-        exit();
+    elseif (!str_contains($email, "@") || !str_ends_with($email, "just.edu.jo")) {
+        $error="Only JUST emails allowed for students, example:ahmad@cit.just.edu.jo";
+     
+     
     }
-
+else{
     // 4. duplicate email check
     $check = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
-    if (mysqli_num_rows($check) > 0) {
-        echo "Email already exists";
-        exit();
+   if (mysqli_num_rows($check) > 0) {
+        $error="Email already exists";
+      
     }
-
+else{
     // 5. hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // 6. insert user
-    $query = "INSERT INTO users (name, email, password, role, faculty)
-              VALUES ('$name', '$email', '$hashedPassword', '$role', '$faculty')";
+    if(!isset($error)){
+    $query = "INSERT INTO users (name, email, password, role )
+              VALUES ('$name', '$email', '$hashedPassword', '$role')";
 
     if (mysqli_query($conn, $query)) {
 
-    
+    $success="registerd successfully";
         header("Location: ../auth/login.php");
         exit();
 
     } else {
         echo "Error: " . mysqli_error($conn);
-    }
+    }}}}
 }
 ?>
 

@@ -32,14 +32,14 @@ window.addEventListener("load", function () {
 
                 e.preventDefault();
 
-                alert("Passwords do not match!");
+               window.alert("Passwords do not match!");
             }
 
             if(password.value.length < 6){
 
                 e.preventDefault();
 
-                alert("Password must be at least 6 characters!");
+               window.alert("Password must be at least 6 characters!");
             }
 
         });

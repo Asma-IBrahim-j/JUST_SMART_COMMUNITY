@@ -154,6 +154,10 @@ $result = mysqli_query($conn, $sql);
 
         </p>
 
+<?php
+if ($row['user_id'] == $_SESSION['user_id'] || $_SESSION['role'] == 'admin') {
+?>
+
         <a class="btn btn-edit"
            href="edit_item.php?id=<?php echo $row['id']; ?>">
 
@@ -176,9 +180,13 @@ $result = mysqli_query($conn, $sql);
 
         </a>
 
+<?php
+}
+?>
+
     </div>
 
-    <?php
+    <?php 
         }
 
     } else {

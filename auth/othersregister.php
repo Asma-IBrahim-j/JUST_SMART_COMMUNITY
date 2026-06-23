@@ -2,7 +2,7 @@
 session_start();
 include "../database/db_connection.php";
 
-function registerUser($conn, $name,  $email, $hashedpassword,$filePath)
+function registerUser(mysqli $conn, string $name,string  $email,string $hashedpassword, string $filePath)
 {
     $role = 'notstudent';
 
@@ -22,16 +22,19 @@ if (isset($_POST['register'])) {
     $name = $_POST['name'];
 $password=$_POST['password'];
  $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
  
-    echo "Invalid Email";
-    exit();
+  //  echo "Invalid Email";
+    $error="Invalid Email";
+  //  exit();
 }
 
 
     if (!isset($_FILES['proof']) || $_FILES['proof']['error'] != 0) {
-        echo "File upload failed";
-        exit();
+       // echo "File upload failed";
+        $error="File upload failed";
+      //  exit();
     }
 
     $fileName = $_FILES['proof']['name'];
@@ -42,16 +45,18 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $allowed = ['pdf', 'jpg', 'png'];
 
     if (!in_array($ext, $allowed)) {
-        echo "Invalid file type";
-        exit();
+       // echo "Invalid file type";
+       $error="Invalid file type";
+      //  exit();
     }
+    
 
     $uniqueName = uniqid() . "." . $ext;
     $path = "../assets/images/" . $uniqueName;
 
     move_uploaded_file($tmpName, $path);
 /** @var mysqli $conn */
-    registerUser(
+   if(!isset($error)) registerUser(
         $conn,
         $name,
         $email,
@@ -59,8 +64,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $path
     );
 
-    echo "Your request has been submitted. Waiting for admin approval.";
-    exit();
+ //   echo "Your request has been submitted. Waiting for admin approval.";
+ $success="Your request has been submitted. Waiting for admin approval.";
+  //  exit();
 }
 ?>
 

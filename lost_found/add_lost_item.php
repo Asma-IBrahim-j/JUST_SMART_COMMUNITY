@@ -9,12 +9,12 @@ if (isset($_POST['submit'])) {
     $description = $_POST['description'];
 
     $location = $_POST['location'];
-
+    $user_id=$_SESSION['user_id'];
     $sql = "
     INSERT INTO lost_items
-    (title, description, location)
+    (user_id,title, description, location)
     VALUES
-    ('$title', '$description', '$location')
+    ('$user_id','$title', '$description', '$location')
     ";
 
     mysqli_query($conn, $sql);

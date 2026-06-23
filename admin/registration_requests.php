@@ -11,15 +11,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
     exit();
 } 
 
+ if(isset($message)): ?>
+    <p style="color:green; text-align:center;">
+        <?= $message ?>
+    </p>
+<?php endif; 
+
 if (isset($_POST['approve'])) {
 
-    $id = $_POST['user_id'];
+    $id = (int)$_POST['user_id'];
   
     mysqli_query($conn,
         "UPDATE users SET pending = 0 WHERE id = $id"
     );
+    $message="approved";
+ header("Location: registration_requests.php");
+    exit();
 
-    echo "Approved ";
+
 }
 
 ?>
@@ -84,7 +93,7 @@ while($row = mysqli_fetch_assoc($result)){
                value="<?= $row['id'] ?>">
 
         <button class="btn btn-success"
-                name="approve">
+                name="approve"  onclick="return confirm('Approve this user?');">
 
             Approve
 
@@ -94,10 +103,14 @@ while($row = mysqli_fetch_assoc($result)){
 
 </div>
 
-<?php
-}
-}
-?>
+  <?php 
+   }}
+    if(isset($message)){
+        echo "<p style='color:red;'>$message</p>";
+    }
+
+
+    ?>
 
 </div>
 

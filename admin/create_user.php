@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../database/db_connection.php";
+/** @var mysqli $conn */
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
     header("Location: ../auth/login.php");
