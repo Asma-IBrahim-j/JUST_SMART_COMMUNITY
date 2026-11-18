@@ -1,0 +1,120 @@
+.body{
+    background-color: rgb(235, 233, 233);
+   
+}
+
+.edit-profile-page{
+    max-width: 700px;
+    margin: 50px auto;
+}
+
+.edit-profile-card{
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.1);
+     /* display: flex;
+    align-items: center;
+    gap: 40px; */
+    width: 500px;
+       
+}
+
+.h2{
+    margin-bottom: 0px;
+    color: #2563eb;
+    
+}
+
+.edit-profile-form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+.form-group{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-group label{
+    width: 80px;
+    font-weight: 600;
+        font-size: 20px;
+
+}
+
+.edit-profile-form input,
+.edit-profile-form select{
+  
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+     width: 300px;
+
+    height: 50px;
+    padding: 0 12px;
+   
+    box-sizing: border-box;
+
+}
+
+.edit-profile-form input:focus,
+.edit-profile-form select:focus{
+    outline: none;
+    border-color: #2563eb;
+
+
+    
+}
+/* .form-group input,
+.form-group select{
+    width: 300px;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+} */
+.save-btn{
+    margin-top: 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.save-btn:hover{
+    background: #1d4ed8;
+}
+
+.cancel-btn{
+    background: #e5e7eb;
+    color: #333;
+    text-decoration: none;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.cancel-btn:hover{
+    background: #d1d5db;
+}
+.buttons{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.edit-profile-image{
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px;
+}

@@ -1,0 +1,135 @@
+.profile-card{
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.1);
+}
+
+.profile-image-container{
+    position: relative;
+        width: fit-content;
+
+}
+
+.profile-image{
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.edit-image-btn{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+   
+    justify-content: center;
+}
+
+.edit-image-btn i{
+    font-size: 16px;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items: flex-start; 
+        justify-content: center;
+
+}.profile-info h2{
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.profile-info p{
+    margin: 0;
+    color: #666;
+}
+
+.profile-page{
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+
+
+
+
+.profile-info-button{
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 160px;
+}
+.body
+{
+    background-color: rgb(235, 233, 233);
+}
+.account-setting-card{
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.1);
+    margin-top: 20px;
+}
+
+.setting-option{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-option:last-child{
+    border-bottom: none;
+}
+
+.setting-option h3{
+    margin: 0 0 8px 0;
+}
+
+.setting-option p{
+    margin: 0;
+    color: #666;
+}
+
+.change-btn{
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+     width: 100px;
+         text-align: center;
+    padding: 12px 0;
+
+}
+
+.delete-btn{
+    background: #dc2626;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+     width: 100px;
+         text-align: center;
+    padding: 12px 0;
+
+}
